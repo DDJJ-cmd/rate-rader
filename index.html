@@ -3,95 +3,215 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>OTA URL Builder</title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>Rate Radar</title>
 
 <style>
 :root{
-  --bg:#f7f8fa;
-  --card:#ffffff;
-  --border:#e5e7eb;
-  --primary:#111111;
-  --muted:#6b7280;
+  --bg:#0b0f1a;
+  --card:rgba(255,255,255,.08);
+  --card2:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.14);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.72);
+  --muted2:rgba(255,255,255,.52);
+  --accent:#ffffff;
+  --danger:#ff5c5c;
+  --ok:#5cffb0;
+  --shadow: 0 10px 30px rgba(0,0,0,.28);
 }
 
 *{box-sizing:border-box;}
-
+html,body{height:100%;}
 body{
   margin:0;
-  background:var(--bg);
+  background: radial-gradient(1200px 800px at 20% -10%, rgba(255,255,255,.12), transparent 50%),
+              radial-gradient(900px 600px at 110% 20%, rgba(255,255,255,.08), transparent 55%),
+              var(--bg);
+  color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
-  padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+  padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
 }
 
 .container{
-  max-width:500px;
+  max-width:560px;
   margin:0 auto;
 }
 
-h1{
-  font-size:22px;
-  margin:20px 0 8px;
+.header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin:18px 0 10px;
 }
-
-.sub{
-  font-size:13px;
+.hgroup h1{
+  font-size:22px;
+  margin:0;
+  letter-spacing:.2px;
+}
+.hgroup .sub{
+  font-size:12px;
   color:var(--muted);
-  margin-bottom:20px;
+  margin-top:6px;
+  line-height:1.35;
+}
+.badge{
+  font-size:11px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  padding:8px 10px;
+  border-radius:999px;
+  white-space:nowrap;
 }
 
 .card{
-  background:var(--card);
-  border:1px solid var(--border);
+  background: linear-gradient(180deg, var(--card), var(--card2));
+  border:1px solid var(--line);
   border-radius:18px;
-  padding:16px;
-  margin-bottom:16px;
+  padding:14px;
+  box-shadow: var(--shadow);
+  margin:12px 0;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
 }
 
 label{
   display:block;
   font-size:12px;
   color:var(--muted);
-  margin-bottom:6px;
-  margin-top:14px;
+  margin:0 0 6px 2px;
 }
 
 input, select, textarea{
   width:100%;
-  padding:14px;
+  padding:14px 12px;
   border-radius:14px;
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(0,0,0,.22);
+  color:var(--text);
   font-size:16px;
-  background:#fff;
+  outline:none;
+}
+input::placeholder, textarea::placeholder{color:rgba(255,255,255,.35);}
+
+.row2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
 }
 
-textarea{
-  min-height:200px;
-  font-size:13px;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+.row3{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:10px;
+}
+
+.btns{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
+  margin-top:10px;
 }
 
 button{
   width:100%;
-  padding:16px;
+  padding:14px 14px;
   border-radius:16px;
-  border:none;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.08);
+  color:var(--text);
   font-size:16px;
-  margin-top:14px;
+}
+button.primary{
+  background:#ffffff;
+  color:#0b0f1a;
+  border:0;
+  font-weight:700;
+}
+button.danger{
+  background:rgba(255,92,92,.16);
+  border:1px solid rgba(255,92,92,.32);
+  color:#ffd0d0;
+}
+button:active{transform: translateY(1px);}
+
+.kpi{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+}
+.kpi .left{
+  display:flex; flex-direction:column; gap:4px;
+}
+.kpi .left .title{
+  font-size:13px; color:var(--muted);
+}
+.kpi .left .value{
+  font-size:18px; font-weight:800;
+}
+.kpi .right{
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.pill{
+  font-size:12px;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
 }
 
-.primary{
-  background:var(--primary);
-  color:white;
+.table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border-radius:14px;
+  border:1px solid var(--line);
+}
+.table th, .table td{
+  padding:10px 10px;
+  font-size:12px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  vertical-align:top;
+}
+.table th{
+  color:var(--muted);
+  background:rgba(255,255,255,.05);
+  text-align:left;
+  position:sticky;
+  top:0;
+}
+.table tr:last-child td{border-bottom:0;}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;}
+.small{font-size:12px;color:var(--muted);line-height:1.4;}
+.hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0;}
+
+textarea#csv{
+  min-height:160px;
+  font-size:12px;
 }
 
-.secondary{
-  background:#eef2f7;
-}
-
-.small{
+.notice{
   font-size:12px;
   color:var(--muted);
   margin-top:10px;
+}
+
+.ok{color:var(--ok);}
+.warn{color:var(--danger);}
+
+@media (max-width: 420px){
+  .row3{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -99,104 +219,316 @@ button{
 <body>
 <div class="container">
 
-<h1>OTA URL Builder</h1>
-<div class="sub">検索URLを量産して「取得の下地」を作る（後で自動化可能）</div>
+  <div class="header">
+    <div class="hgroup">
+      <h1>Rate Radar</h1>
+      <div class="sub">iPhoneで価格を“記録→CSV化→Pythonへ”<br>（自動取得は後で差し替え可能）</div>
+    </div>
+    <div class="badge" id="statusBadge">Local: Ready</div>
+  </div>
 
-<div class="card">
+  <div class="card">
+    <div class="kpi">
+      <div class="left">
+        <div class="title">Records</div>
+        <div class="value"><span id="recCount">0</span> 件</div>
+      </div>
+      <div class="right">
+        <div class="pill">CSV: <span class="mono" id="csvRows">0</span> rows</div>
+        <div class="pill">Last: <span class="mono" id="lastTs">-</span></div>
+      </div>
+    </div>
+    <div class="notice">※ データはこのiPhone内（localStorage）に保存。GitHubには保存されません。</div>
+  </div>
 
-<label>OTA</label>
-<select id="ota">
-  <option value="booking">Booking.com</option>
-</select>
+  <div class="card">
+    <div class="grid">
 
-<label>ホテル名（検索キーワード）</label>
-<input id="hotel" placeholder="例：Hotel Metropolitan Tokyo">
+      <div class="row2">
+        <div>
+          <label>Stay date（チェックイン日）</label>
+          <input id="stayDate" type="date" />
+        </div>
+        <div>
+          <label>Nights（泊数）</label>
+          <input id="nights" type="number" min="1" max="30" value="1" />
+        </div>
+      </div>
 
-<label>開始日（チェックイン）</label>
-<input id="startDate" type="date">
+      <div class="row2">
+        <div>
+          <label>Hotel（ホテルコード/名称）</label>
+          <input id="hotel" placeholder="例：MOH / Hilton Tokyo" />
+        </div>
+        <div>
+          <label>OTA</label>
+          <select id="ota">
+            <option>Booking</option>
+            <option>Expedia</option>
+            <option>Agoda</option>
+            <option>Rakuten</option>
+            <option>Jalan</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
 
-<label>何日分URLを作る？</label>
-<input id="days" type="number" value="14">
+      <div class="row3">
+        <div>
+          <label>Price（数値/カンマなし）</label>
+          <input id="price" inputmode="numeric" placeholder="例：18500" />
+        </div>
+        <div>
+          <label>Currency</label>
+          <select id="currency">
+            <option selected>JPY</option>
+            <option>USD</option>
+            <option>EUR</option>
+            <option>GBP</option>
+          </select>
+        </div>
+        <div>
+          <label>Adults（任意）</label>
+          <input id="adults" type="number" min="1" max="6" value="2" />
+        </div>
+      </div>
 
-<label>泊数</label>
-<input id="nights" type="number" value="1">
+      <div>
+        <label>Room/Plan（任意：比較条件）</label>
+        <input id="room" placeholder="例：Std Twin RO / Breakfast incl." />
+      </div>
 
-<label>人数</label>
-<input id="adults" type="number" value="2">
+      <div>
+        <label>Cancel policy（任意）</label>
+        <input id="cancel" placeholder="例：FreeCancel / NonRefund" />
+      </div>
 
-<label>部屋数</label>
-<input id="rooms" type="number" value="1">
+      <div>
+        <label>Memo（任意）</label>
+        <input id="memo" placeholder="例：アプリ表示価格 / 税サ込 / クーポンなし など" />
+      </div>
 
-<label>通貨</label>
-<input id="currency" value="JPY">
+      <div class="btns">
+        <button class="primary" onclick="addRecord()">＋ Add record</button>
+        <button onclick="copyCSV()">CSVをコピー</button>
+        <button onclick="downloadCSV()">CSVをファイル化（共有）</button>
+        <button class="danger" onclick="clearAll()">全削除</button>
+      </div>
 
-<button class="primary" onclick="generate()">URLを生成</button>
-<button class="secondary" onclick="copyOut()">コピー</button>
+      <div class="small">
+        <div class="hr"></div>
+        使い方：
+        <ol>
+          <li>OTAで見た価格を入力 → <b>Add record</b></li>
+          <li>たまったら <b>CSVをコピー</b>（Pythonへ貼る）</li>
+          <li>または <b>CSVをファイル化</b> でCSVを保存</li>
+        </ol>
+      </div>
 
-<div class="small">生成されたURLを順番に開いて価格を確認します。</div>
+    </div>
+  </div>
 
-</div>
+  <div class="card">
+    <label>CSV（Python用）</label>
+    <textarea id="csv" class="mono" readonly></textarea>
+    <div class="small">ヘッダ付き。Excel/スプレッドシートにも貼れます。</div>
+  </div>
 
-<div class="card">
-<label>生成結果</label>
-<textarea id="out" readonly></textarea>
-</div>
+  <div class="card">
+    <div class="small">直近10件（確認用）</div>
+    <div style="max-height:280px; overflow:auto; margin-top:10px;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Collected</th>
+            <th>Stay</th>
+            <th>Hotel</th>
+            <th>OTA</th>
+            <th>Price</th>
+            <th>Room/Cancel</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="small" style="text-align:center; margin:18px 0 8px; color:var(--muted2);">
+    Rate Radar / mobile capture MVP
+  </div>
 
 </div>
 
 <script>
-function fmt(d){
-  return {
-    yyyy:d.getFullYear(),
-    mm:String(d.getMonth()+1).padStart(2,'0'),
-    dd:String(d.getDate()).padStart(2,'0')
-  };
+const KEY = "rate_radar_records_v1";
+
+function nowJP(){
+  // iPhoneのローカル時刻で十分（後でPython側で整形してもOK）
+  const d = new Date();
+  const pad = (n)=>String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function addDays(date,n){
-  const d=new Date(date);
-  d.setDate(d.getDate()+n);
-  return d;
+function load(){
+  try{
+    return JSON.parse(localStorage.getItem(KEY) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+function save(arr){
+  localStorage.setItem(KEY, JSON.stringify(arr));
 }
 
-function bookingUrl({query,checkin,checkout,adults,rooms,currency}){
-  const q=encodeURIComponent(query);
-  return `https://www.booking.com/searchresults.ja.html?ss=${q}&checkin_year=${checkin.yyyy}&checkin_month=${checkin.mm}&checkin_monthday=${checkin.dd}&checkout_year=${checkout.yyyy}&checkout_month=${checkout.mm}&checkout_monthday=${checkout.dd}&group_adults=${adults}&no_rooms=${rooms}&selected_currency=${currency}`;
+function sanitizeNumber(v){
+  if(v==null) return "";
+  return String(v).replace(/,/g,"").trim();
 }
 
-function generate(){
-  const hotel=document.getElementById('hotel').value;
-  const start=document.getElementById('startDate').value;
-  const days=Number(document.getElementById('days').value);
-  const nights=Number(document.getElementById('nights').value);
-  const adults=Number(document.getElementById('adults').value);
-  const rooms=Number(document.getElementById('rooms').value);
-  const currency=document.getElementById('currency').value;
+function setStatus(msg, ok=true){
+  const el = document.getElementById("statusBadge");
+  el.textContent = msg;
+  el.style.borderColor = ok ? "rgba(92,255,176,.35)" : "rgba(255,92,92,.35)";
+  el.style.background = ok ? "rgba(92,255,176,.12)" : "rgba(255,92,92,.12)";
+  el.style.color = ok ? "#c7ffe6" : "#ffd0d0";
+}
 
-  if(!hotel||!start){alert("ホテル名と開始日を入力してください");return;}
+function addRecord(){
+  const stayDate = document.getElementById("stayDate").value;
+  const nights = document.getElementById("nights").value;
+  const hotel = document.getElementById("hotel").value.trim();
+  const ota = document.getElementById("ota").value.trim();
+  const priceRaw = sanitizeNumber(document.getElementById("price").value);
+  const currency = document.getElementById("currency").value.trim();
+  const adults = document.getElementById("adults").value;
+  const room = document.getElementById("room").value.trim();
+  const cancel = document.getElementById("cancel").value.trim();
+  const memo = document.getElementById("memo").value.trim();
 
-  const startDate=new Date(start);
-  const lines=[];
-
-  for(let i=0;i<days;i++){
-    const ci=addDays(startDate,i);
-    const co=addDays(ci,nights);
-    const checkin=fmt(ci);
-    const checkout=fmt(co);
-
-    const url=bookingUrl({query:hotel,checkin,checkout,adults,rooms,currency});
-    lines.push(`${checkin.yyyy}-${checkin.mm}-${checkin.dd}  ${url}`);
+  if(!stayDate || !hotel || !ota || !priceRaw){
+    setStatus("Missing required fields", false);
+    alert("必須：Stay date / Hotel / OTA / Price を入れてください");
+    return;
+  }
+  if(!/^\d+(\.\d+)?$/.test(priceRaw)){
+    setStatus("Price invalid", false);
+    alert("Priceは数値のみ（カンマなし）で入力してください");
+    return;
   }
 
-  document.getElementById('out').value=lines.join("\n");
+  const rec = {
+    collected_at: nowJP(),
+    stay_date: stayDate,
+    nights: Number(nights || 1),
+    hotel,
+    ota,
+    price: Number(priceRaw),
+    currency,
+    adults: Number(adults || 2),
+    room_plan: room,
+    cancel_policy: cancel,
+    memo
+  };
+
+  const arr = load();
+  arr.unshift(rec); // 新しい順
+  save(arr);
+
+  // 入力の一部を残して、priceだけ消す運用が速い
+  document.getElementById("price").value = "";
+  setStatus("Saved ✓", true);
+  render();
 }
 
-function copyOut(){
-  const t=document.getElementById('out');
-  t.select();
-  document.execCommand('copy');
-  alert("コピーしました");
+function toCSV(arr){
+  const header = [
+    "collected_at","stay_date","nights","hotel","ota",
+    "price","currency","adults","room_plan","cancel_policy","memo"
+  ];
+  const esc = (s)=>{
+    const v = (s==null) ? "" : String(s);
+    // CSVの基本エスケープ
+    if(v.includes('"') || v.includes(",") || v.includes("\n")){
+      return `"${v.replace(/"/g,'""')}"`;
+    }
+    return v;
+  };
+
+  const lines = [header.join(",")];
+  for(const r of arr.slice().reverse()){ // 追加順（古→新）にしたいならreverse
+    lines.push(header.map(k=>esc(r[k])).join(","));
+  }
+  return lines.join("\n");
 }
+
+function render(){
+  const arr = load();
+  document.getElementById("recCount").textContent = arr.length;
+  document.getElementById("csvRows").textContent = arr.length;
+  document.getElementById("lastTs").textContent = arr[0]?.collected_at || "-";
+
+  const csv = toCSV(arr);
+  document.getElementById("csv").value = csv;
+
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  const show = arr.slice(0,10);
+  for(const r of show){
+    const tr = document.createElement("tr");
+    const rc = `${r.room_plan || "-"} / ${r.cancel_policy || "-"}`;
+    tr.innerHTML = `
+      <td class="mono">${r.collected_at}</td>
+      <td class="mono">${r.stay_date} (${r.nights})</td>
+      <td>${r.hotel}</td>
+      <td>${r.ota}</td>
+      <td class="mono">${r.price} ${r.currency}</td>
+      <td>${rc}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+function copyCSV(){
+  const t = document.getElementById("csv");
+  t.focus();
+  t.select();
+  document.execCommand("copy");
+  setStatus("CSV copied ✓", true);
+  alert("CSVをコピーしました（PythonやExcelに貼れます）");
+}
+
+function downloadCSV(){
+  const csv = document.getElementById("csv").value;
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  const ts = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `rate_radar_${ts}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  setStatus("CSV exported ✓", true);
+}
+
+function clearAll(){
+  if(!confirm("全部消します。本当にOK？")) return;
+  localStorage.removeItem(KEY);
+  setStatus("Cleared", true);
+  render();
+}
+
+// 初期値：今日をセット
+(function init(){
+  const d = new Date();
+  const pad = (n)=>String(n).padStart(2,"0");
+  const today = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  document.getElementById("stayDate").value = today;
+  render();
+})();
 </script>
 
 </body>
