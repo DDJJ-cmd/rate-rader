@@ -3,168 +3,201 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>OTA URL Builder (Mobile)</title>
+<title>OTA URL Builder</title>
+
 <style>
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;margin:16px;line-height:1.4;}
-  .card{border:1px solid #ddd;border-radius:12px;padding:14px;margin:12px 0;}
-  label{display:block;font-size:12px;color:#555;margin:10px 0 6px;}
-  input,select,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:10px;font-size:16px;}
-  button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;margin-top:10px;}
-  .primary{background:#111;color:#fff;}
-  .ghost{background:#f2f2f2;}
-  textarea{height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;}
-  .row{display:flex;gap:10px;}
-  .row > div{flex:1;}
-  .small{font-size:12px;color:#666;}
+:root{
+  --bg:#f7f8fa;
+  --card:#ffffff;
+  --border:#e5e7eb;
+  --primary:#111111;
+  --muted:#6b7280;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+  padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+}
+
+.container{
+  max-width:500px;
+  margin:0 auto;
+}
+
+h1{
+  font-size:22px;
+  margin:20px 0 8px;
+}
+
+.sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:20px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+  margin-top:14px;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  font-size:16px;
+  background:#fff;
+}
+
+textarea{
+  min-height:200px;
+  font-size:13px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  border-radius:16px;
+  border:none;
+  font-size:16px;
+  margin-top:14px;
+}
+
+.primary{
+  background:var(--primary);
+  color:white;
+}
+
+.secondary{
+  background:#eef2f7;
+}
+
+.small{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:10px;
+}
 </style>
 </head>
+
 <body>
-<h2>OTA URL Builder（iPhone用）</h2>
-<div class="small">目的：検索URLを量産して「取得の下地」を作る（後で自動取得に差し替え可能）</div>
+<div class="container">
+
+<h1>OTA URL Builder</h1>
+<div class="sub">検索URLを量産して「取得の下地」を作る（後で自動化可能）</div>
 
 <div class="card">
-  <label>OTA</label>
-  <select id="ota">
-    <option value="booking">Booking.com（検索URL）</option>
-    <!-- 必要なら後で追加 -->
-  </select>
 
-  <label>ホテル名（検索キーワード）</label>
-  <input id="hotel" placeholder="例：Hotel Metropolitan Tokyo" />
+<label>OTA</label>
+<select id="ota">
+  <option value="booking">Booking.com</option>
+</select>
 
-  <div class="row">
-    <div>
-      <label>開始日（チェックイン）</label>
-      <input id="startDate" type="date" />
-    </div>
-    <div>
-      <label>日数（何日分URL作る？）</label>
-      <input id="days" type="number" value="14" min="1" max="90" />
-    </div>
-  </div>
+<label>ホテル名（検索キーワード）</label>
+<input id="hotel" placeholder="例：Hotel Metropolitan Tokyo">
 
-  <div class="row">
-    <div>
-      <label>泊数</label>
-      <input id="nights" type="number" value="1" min="1" max="14" />
-    </div>
-    <div>
-      <label>人数</label>
-      <input id="adults" type="number" value="2" min="1" max="6" />
-    </div>
-  </div>
+<label>開始日（チェックイン）</label>
+<input id="startDate" type="date">
 
-  <div class="row">
-    <div>
-      <label>部屋数</label>
-      <input id="rooms" type="number" value="1" min="1" max="3" />
-    </div>
-    <div>
-      <label>通貨</label>
-      <input id="currency" value="JPY" />
-    </div>
-  </div>
+<label>何日分URLを作る？</label>
+<input id="days" type="number" value="14">
 
-  <button class="primary" onclick="generate()">URLを生成</button>
-  <button class="ghost" onclick="saveLog()">ログ保存（local）</button>
-  <button class="ghost" onclick="clearLog()">ログ削除</button>
+<label>泊数</label>
+<input id="nights" type="number" value="1">
+
+<label>人数</label>
+<input id="adults" type="number" value="2">
+
+<label>部屋数</label>
+<input id="rooms" type="number" value="1">
+
+<label>通貨</label>
+<input id="currency" value="JPY">
+
+<button class="primary" onclick="generate()">URLを生成</button>
+<button class="secondary" onclick="copyOut()">コピー</button>
+
+<div class="small">生成されたURLを順番に開いて価格を確認します。</div>
+
 </div>
 
 <div class="card">
-  <label>生成結果（URL一覧）</label>
-  <textarea id="out" readonly></textarea>
-  <button class="primary" onclick="copyOut()">コピー</button>
+<label>生成結果</label>
+<textarea id="out" readonly></textarea>
 </div>
 
-<div class="card">
-  <label>保存ログ（localStorage）</label>
-  <textarea id="log" readonly></textarea>
 </div>
 
 <script>
 function fmt(d){
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth()+1).padStart(2,'0');
-  const dd = String(d.getDate()).padStart(2,'0');
-  return {yyyy, mm, dd};
+  return {
+    yyyy:d.getFullYear(),
+    mm:String(d.getMonth()+1).padStart(2,'0'),
+    dd:String(d.getDate()).padStart(2,'0')
+  };
 }
 
-function addDays(date, n){
-  const d = new Date(date);
+function addDays(date,n){
+  const d=new Date(date);
   d.setDate(d.getDate()+n);
   return d;
 }
 
-function bookingUrl({query, checkin, checkout, adults, rooms, currency}){
-  // Bookingの検索URL（パラメータは変わる可能性あり。下地として使う想定）
-  const q = encodeURIComponent(query);
-  return `https://www.booking.com/searchresults.ja.html?ss=${q}&checkin_year=${checkin.yyyy}&checkin_month=${checkin.mm}&checkin_monthday=${checkin.dd}&checkout_year=${checkout.yyyy}&checkout_month=${checkout.mm}&checkout_monthday=${checkout.dd}&group_adults=${adults}&no_rooms=${rooms}&selected_currency=${encodeURIComponent(currency)}`;
+function bookingUrl({query,checkin,checkout,adults,rooms,currency}){
+  const q=encodeURIComponent(query);
+  return `https://www.booking.com/searchresults.ja.html?ss=${q}&checkin_year=${checkin.yyyy}&checkin_month=${checkin.mm}&checkin_monthday=${checkin.dd}&checkout_year=${checkout.yyyy}&checkout_month=${checkout.mm}&checkout_monthday=${checkout.dd}&group_adults=${adults}&no_rooms=${rooms}&selected_currency=${currency}`;
 }
 
 function generate(){
-  const ota = document.getElementById('ota').value;
-  const hotel = document.getElementById('hotel').value.trim();
-  const startDate = document.getElementById('startDate').value;
-  const days = Number(document.getElementById('days').value);
-  const nights = Number(document.getElementById('nights').value);
-  const adults = Number(document.getElementById('adults').value);
-  const rooms = Number(document.getElementById('rooms').value);
-  const currency = document.getElementById('currency').value.trim() || "JPY";
+  const hotel=document.getElementById('hotel').value;
+  const start=document.getElementById('startDate').value;
+  const days=Number(document.getElementById('days').value);
+  const nights=Number(document.getElementById('nights').value);
+  const adults=Number(document.getElementById('adults').value);
+  const rooms=Number(document.getElementById('rooms').value);
+  const currency=document.getElementById('currency').value;
 
-  if(!hotel) return alert("ホテル名を入れてください");
-  if(!startDate) return alert("開始日を選んでください");
-  if(days <= 0) return alert("日数が不正です");
+  if(!hotel||!start){alert("ホテル名と開始日を入力してください");return;}
 
-  const start = new Date(startDate);
-  const lines = [];
+  const startDate=new Date(start);
+  const lines=[];
 
   for(let i=0;i<days;i++){
-    const ci = addDays(start, i);
-    const co = addDays(ci, nights);
-    const checkin = fmt(ci);
-    const checkout = fmt(co);
+    const ci=addDays(startDate,i);
+    const co=addDays(ci,nights);
+    const checkin=fmt(ci);
+    const checkout=fmt(co);
 
-    let url = "";
-    if(ota === "booking"){
-      url = bookingUrl({query: hotel, checkin, checkout, adults, rooms, currency});
-    }
-    lines.push(`${checkin.yyyy}-${checkin.mm}-${checkin.dd}\t${url}`);
+    const url=bookingUrl({query:hotel,checkin,checkout,adults,rooms,currency});
+    lines.push(`${checkin.yyyy}-${checkin.mm}-${checkin.dd}  ${url}`);
   }
 
-  document.getElementById('out').value = lines.join("\n");
+  document.getElementById('out').value=lines.join("\n");
 }
 
 function copyOut(){
-  const t = document.getElementById('out');
+  const t=document.getElementById('out');
   t.select();
-  t.setSelectionRange(0, 999999);
   document.execCommand('copy');
   alert("コピーしました");
 }
-
-function saveLog(){
-  const out = document.getElementById('out').value.trim();
-  if(!out) return alert("先にURLを生成してください");
-  const now = new Date().toISOString();
-  const key = "ota_url_log";
-  const prev = localStorage.getItem(key) || "";
-  const merged = `# ${now}\n${out}\n\n` + prev;
-  localStorage.setItem(key, merged);
-  loadLog();
-  alert("ログ保存しました");
-}
-
-function loadLog(){
-  const key = "ota_url_log";
-  document.getElementById('log').value = localStorage.getItem(key) || "";
-}
-function clearLog(){
-  if(confirm("ログを消しますか？")){
-    localStorage.removeItem("ota_url_log");
-    loadLog();
-  }
-}
-loadLog();
 </script>
+
 </body>
 </html>
